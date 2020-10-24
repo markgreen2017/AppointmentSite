@@ -38,6 +38,7 @@ namespace AppointmentSite.Models
         public string Notes { get; set; }
     }
 
+    // Validation attribute to ensure that a DateTime is a valid DateTime in the future (from submission)
     public class FutureDate : ValidationAttribute
     {
         // Returns true if the DateTime provided is greater than or equal to the current date and time

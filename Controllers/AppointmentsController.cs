@@ -60,7 +60,7 @@ namespace AppointmentSite.Controllers
             {
                 _context.Add(appointments);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", new { appointments.Id }); // Send them to the details page for their appointment
             }
             return View(appointments);
         }
