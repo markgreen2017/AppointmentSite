@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AppointmentSite.Migrations
 {
     [DbContext(typeof(AppointmentSiteContext))]
-    [Migration("20201024033856_CreateAppointmentBranch")]
+    [Migration("20201025011246_CreateAppointmentBranch")]
     partial class CreateAppointmentBranch
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,18 +33,22 @@ namespace AppointmentSite.Migrations
 
                     b.Property<string>("EmailAddress")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(20);
 
                     b.Property<string>("Subject")
                         .IsRequired()

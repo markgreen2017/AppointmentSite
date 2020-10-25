@@ -26,7 +26,7 @@ namespace AppointmentSite.Controllers
         }
 
         // GET: Appointments/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, string eMail)
         {
             if (id == null)
             {
@@ -60,7 +60,7 @@ namespace AppointmentSite.Controllers
             {
                 _context.Add(appointments);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details", new { appointments.Id }); // Send them to the details page for their appointment
+                return RedirectToAction("Details", new { appointments.Id, appointments.EmailAddress }); // Send them to the details page for their appointment
             }
             return View(appointments);
         }

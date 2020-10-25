@@ -35,6 +35,8 @@ namespace AppointmentSite.Models
         [Required(ErrorMessage = "Please enter a valid date and time.")]
         public DateTime AppointmentDateTime { get; set; }
 
+        [Required]
+        [StringLength(1000, ErrorMessage = "The notes entered are too long. Please try again.")]
         public string Notes { get; set; }
     }
 
