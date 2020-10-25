@@ -25,7 +25,7 @@
                 @Html.DisplayNameFor(model => model.EmailAddress)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.AppointmentDateTime)
+                @Html.DisplayNameFor(model => model.StartDateTime)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Notes)
@@ -52,7 +52,7 @@
                 @Html.DisplayFor(modelItem => item.EmailAddress)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.AppointmentDateTime)
+                @Html.DisplayFor(modelItem => item.StartDateTime)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

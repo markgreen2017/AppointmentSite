@@ -26,9 +26,6 @@ namespace AppointmentSite.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("AppointmentDateTime")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("EmailAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(20)")
@@ -48,9 +45,15 @@ namespace AppointmentSite.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasMaxLength(20);
 
+                    b.Property<DateTime>("StartDateTime")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Subject")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("duration")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

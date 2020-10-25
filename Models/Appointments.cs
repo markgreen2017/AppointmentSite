@@ -33,7 +33,12 @@ namespace AppointmentSite.Models
         [DataType(DataType.DateTime)]
         [FutureDate(ErrorMessage = "Please enter a date in the future.")]
         [Required(ErrorMessage = "Please enter a valid date and time.")]
-        public DateTime AppointmentDateTime { get; set; }
+        public DateTime StartDateTime { get; set; }
+
+        [Display(Name = "Duration (Minutes)")]
+        [Range(1, 60, ErrorMessage = "Please enter a duration between 1 and 60 minutes.")]
+        [Required(ErrorMessage = "Please enter a duration.")]
+        public int duration { get; set; }
 
         [Required]
         [StringLength(1000, ErrorMessage = "The notes entered are too long. Please try again.")]
