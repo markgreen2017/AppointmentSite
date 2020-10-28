@@ -24,7 +24,7 @@ namespace AppointmentSite.Models
         public string PhoneNumber { get; set; }
 
         [Display(Name = "Email Address")]
-        [StringLength(20, ErrorMessage = "The e-mail address entered is too long. Please try again.")]
+        [StringLength(300, ErrorMessage = "The e-mail address entered is too long. Please try again.")]
         [EmailAddress(ErrorMessage = "Invalid Email Address")]
         [Required(ErrorMessage = "Please enter a valid email address.")]
         public string EmailAddress { get; set; }
