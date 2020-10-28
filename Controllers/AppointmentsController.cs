@@ -54,14 +54,15 @@ namespace AppointmentSite.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Notes,Name,Subject,PhoneNumber,EmailAddress,AppointmentDateTime")] Appointments appointments)
+        public async Task<IActionResult> Create(Appointments appointments)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && CreateAppointmentLogic.validAppointment(appointments.StartDateTime, appointments.duration, _context))
             {
                 _context.Add(appointments);
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Details", new { appointments.Id, appointments.EmailAddress }); // Send them to the details page for their appointment
             }
+            ModelState.AddModelError("StartDateTime", "The appointment entered is not available. Please try again.");
             return View(appointments);
         }
 

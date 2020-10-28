@@ -10,20 +10,25 @@ namespace AppointmentSite
 {
     public class CreateAppointmentLogic
     {
-        public bool validAppointment(DateTime start, DateTime end, AppointmentSiteContext context)
+        public static bool validAppointment(DateTime start, int duration, AppointmentSiteContext context)
         {
-            //if (end.Subtract(start).TotalMinutes <= 60)
-            {
+            if (duration <= 60 && appointmentAvailable(start, duration, context))
+                return true;
 
-            }
             return false;
         }
 
-        public bool appointmentAvailable(DateTime start, DateTime end, AppointmentSiteContext context)
+        private static bool appointmentAvailable(DateTime start, int duration, AppointmentSiteContext context)
         {
-            var possibleConflicts = new List<Appointments>();
+            var possibleConflicts = from a in context.Appointments
+                                    where !(((a.StartDateTime.AddMinutes(duration) < start))
+                                    || (start.AddMinutes(duration) < a.StartDateTime))
+                                    select a;
 
-            //possibleConflicts = context.Appointments.Where(a =>)
+
+            if (possibleConflicts.FirstOrDefault() == null)
+                return true;
+
             return false;
         }
     }
