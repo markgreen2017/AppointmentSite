@@ -56,13 +56,16 @@ namespace AppointmentSite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Appointments appointments)
         {
-            if (ModelState.IsValid && CreateAppointmentLogic.validAppointment(appointments.StartDateTime, appointments.duration, _context))
+            if (ModelState.IsValid)
             {
-                _context.Add(appointments);
-                await _context.SaveChangesAsync();
-                return RedirectToAction("Details", new { appointments.Id, appointments.EmailAddress }); // Send them to the details page for their appointment
-            }
-            ModelState.AddModelError("StartDateTime", "The appointment entered is not available. Please try again.");
+                if (CreateAppointmentLogic.validAppointment(appointments.StartDateTime, appointments.duration, _context))
+                {
+                    _context.Add(appointments);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Details", new { appointments.Id, appointments.EmailAddress }); // Send them to the details page for their appointment
+                }
+                ModelState.AddModelError("StartDateTime", "The appointment entered is not available. Please try again.");
+            }   
             return View(appointments);
         }
 
