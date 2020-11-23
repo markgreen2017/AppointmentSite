@@ -58,7 +58,7 @@ namespace AppointmentSite.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (CreateAppointmentLogic.validAppointment(appointments.StartDateTime, appointments.duration, _context))
+                if (AppointmentsManager.validAppointment(appointments.StartDateTime, appointments.duration, _context))
                 {
                     _context.Add(appointments);
                     await _context.SaveChangesAsync();

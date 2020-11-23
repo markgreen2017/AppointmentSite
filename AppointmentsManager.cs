@@ -8,7 +8,7 @@ using AppointmentSite.Models;
 
 namespace AppointmentSite
 {
-    public class CreateAppointmentLogic
+    public class AppointmentsManager
     {
         public static bool validAppointment(DateTime start, int duration, AppointmentSiteContext context)
         {
