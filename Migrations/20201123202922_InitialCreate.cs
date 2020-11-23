@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AppointmentSite.Migrations
 {
-    public partial class Initial : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -16,7 +16,7 @@ namespace AppointmentSite.Migrations
                     Name = table.Column<string>(nullable: false),
                     Subject = table.Column<string>(nullable: false),
                     PhoneNumber = table.Column<string>(maxLength: 20, nullable: false),
-                    EmailAddress = table.Column<string>(maxLength: 20, nullable: false),
+                    EmailAddress = table.Column<string>(maxLength: 300, nullable: false),
                     StartDateTime = table.Column<DateTime>(nullable: false),
                     duration = table.Column<int>(nullable: false),
                     Notes = table.Column<string>(maxLength: 1000, nullable: false)

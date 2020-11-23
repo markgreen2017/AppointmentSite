@@ -54,7 +54,7 @@ namespace AppointmentSite.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Appointments appointments)
+        public async Task<IActionResult> Create(Appointment appointments)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +90,7 @@ namespace AppointmentSite.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Notes,Name,Subject,PhoneNumber,EmailAddress,AppointmentDateTime")] Appointments appointments)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Notes,Name,Subject,PhoneNumber,EmailAddress,AppointmentDateTime")] Appointment appointments)
         {
             if (id != appointments.Id)
             {

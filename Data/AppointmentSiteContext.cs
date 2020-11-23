@@ -13,6 +13,6 @@ namespace AppointmentSite.Data
         {
         }
 
-        public DbSet<Appointments> Appointments { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
     }
 }

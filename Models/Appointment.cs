@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace AppointmentSite.Models
 {
-    public class Appointments
+    public class Appointment
     {
         public int Id { get; set; }
 
