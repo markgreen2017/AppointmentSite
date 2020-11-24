@@ -19,7 +19,7 @@ namespace AppointmentSite
 
         public bool CreateAppointment(Appointment appointment)
         {
-            // If the appointment is valid, return true, otherwise false
+            // Check if the appointment is valid before adding it to the database
             if (ValidAppointment(appointment.StartDateTime, appointment.duration))
             {
                 _context.Add(appointment);
@@ -32,9 +32,13 @@ namespace AppointmentSite
 
         public bool EditAppointment(Appointment appointment)
         {
-            _context.Update(appointment);
-            _context.SaveChanges();
-            return true;
+            if (ValidAppointment(appointment.StartDateTime, appointment.duration, appointment.Id))
+            {
+                _context.Update(appointment);
+                _context.SaveChanges();
+                return true;
+            }
+            return false;
         }
 
         public void DeleteAppointment(int? id)
@@ -44,7 +48,7 @@ namespace AppointmentSite
             _context.SaveChanges();
         }
 
-        // TODO: Redo this via overload to search via eMail and last name
+        // TODO: Redo this via overload to search via appointment Id and last name
         public Appointment GetAppointment(int? id)
         {
             
@@ -59,22 +63,26 @@ namespace AppointmentSite
             return appointments;
         }
 
-        private bool ValidAppointment(DateTime start, int duration)
+        // Returns a boolean representing whether or not an appointment with a given start DateTime and duration is both of acceptable duration and available
+        private bool ValidAppointment(DateTime start, int duration, int? idToExclude = null)
         {
-            if (duration <= 60 && AppointmentAvailable(start, duration))
+            if (duration <= 60 && AppointmentAvailable(start, duration, idToExclude))
                 return true;
 
             return false;
         }
 
-        private bool AppointmentAvailable(DateTime start, int duration)
+        // Returns a boolean representing whether or not an appointment with a given start DateTime and duration is available
+        private bool AppointmentAvailable(DateTime start, int duration, int? idToExclude)
         {
+            // Returns all appointments that could conflict with the start time and duration given
+            // If an idToExclude is given, excludes the appointment with that Id from the query
             var possibleConflicts = from a in _context.Appointments
                                     where !(((a.StartDateTime.AddMinutes(duration) < start))
-                                    || (start.AddMinutes(duration) < a.StartDateTime))
+                                    || (start.AddMinutes(duration) < a.StartDateTime)) && (idToExclude == null ? true : a.Id != idToExclude)
                                     select a;
 
-
+            // If no appointments that could conflict actually exist, return true, false otherwise
             if (possibleConflicts.FirstOrDefault() == null)
                 return true;
 
