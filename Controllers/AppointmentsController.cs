@@ -26,7 +26,7 @@ namespace AppointmentSite.Controllers
         }
 
         // GET: Appointments/Details/5
-        // TODO: Fix this to only give details via eMail and last name
+        // TODO: Fix this to only give details via id and last name
         public IActionResult Details(int? id, string eMail)
         {
             if (id == null)
@@ -96,7 +96,8 @@ namespace AppointmentSite.Controllers
                 if (_apptsmanager.EditAppointment(appointment))
                 {
                     return RedirectToAction(nameof(Index));
-                } 
+                }
+                ModelState.AddModelError("StartDateTime", "The appointment entered is not available. Please try again.");
             }
             return View(appointment);
         }
