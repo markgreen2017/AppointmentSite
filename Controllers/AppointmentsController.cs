@@ -12,35 +12,36 @@ namespace AppointmentSite.Controllers
 {
     public class AppointmentsController : Controller
     {
-        private readonly AppointmentSiteContext _context;
+        private readonly AppointmentsManager _apptsmanager;
 
-        public AppointmentsController(AppointmentSiteContext context)
+        public AppointmentsController(AppointmentsManager apptsmanager)
         {
-            _context = context;
+            _apptsmanager = apptsmanager;
         }
 
         // GET: Appointments
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Appointments.ToListAsync());
+            return View(_apptsmanager.GetAppointments());
         }
 
         // GET: Appointments/Details/5
-        public async Task<IActionResult> Details(int? id, string eMail)
+        // TODO: Fix this to only give details via eMail and last name
+        public IActionResult Details(int? id, string eMail)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var appointments = await _context.Appointments
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (appointments == null)
+            var appointment = _apptsmanager.GetAppointment(id);
+            
+            if (appointment == null)
             {
                 return NotFound();
             }
 
-            return View(appointments);
+            return View(appointment);
         }
 
         // GET: Appointments/Create
@@ -49,109 +50,83 @@ namespace AppointmentSite.Controllers
             return View();
         }
 
-        // POST: Appointments/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Appointment appointments)
+        public IActionResult Create(Appointment appointment)
         {
             if (ModelState.IsValid)
             {
-                if (AppointmentsManager.validAppointment(appointments.StartDateTime, appointments.duration, _context))
+                if (_apptsmanager.CreateAppointment(appointment))
                 {
-                    _context.Add(appointments);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("Details", new { appointments.Id, appointments.EmailAddress }); // Send them to the details page for their appointment
+                    return RedirectToAction("Details", new { appointment.Id, appointment.EmailAddress }); // Send them to the details page for their appointment
                 }
                 ModelState.AddModelError("StartDateTime", "The appointment entered is not available. Please try again.");
             }   
-            return View(appointments);
+            return View(appointment);
         }
 
         // GET: Appointments/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var appointments = await _context.Appointments.FindAsync(id);
-            if (appointments == null)
+            var appointment = _apptsmanager.GetAppointment(id);
+
+            if (appointment == null)
             {
                 return NotFound();
             }
-            return View(appointments);
+            return View(appointment);
         }
 
-        // POST: Appointments/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Notes,Name,Subject,PhoneNumber,EmailAddress,AppointmentDateTime")] Appointment appointments)
+        public IActionResult Edit(int id, Appointment appointment)
         {
-            if (id != appointments.Id)
+            if (id != appointment.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                try
+                if (_apptsmanager.EditAppointment(appointment))
                 {
-                    _context.Update(appointments);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AppointmentsExists(appointments.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Index));
+                } 
             }
-            return View(appointments);
+            return View(appointment);
         }
 
         // GET: Appointments/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var appointments = await _context.Appointments
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (appointments == null)
+            var appointment = _apptsmanager.GetAppointment(id);
+
+            if (appointment == null)
             {
                 return NotFound();
             }
 
-            return View(appointments);
+            return View(appointment);
         }
 
         // POST: Appointments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var appointments = await _context.Appointments.FindAsync(id);
-            _context.Appointments.Remove(appointments);
-            await _context.SaveChangesAsync();
+            _apptsmanager.DeleteAppointment(id);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AppointmentsExists(int id)
-        {
-            return _context.Appointments.Any(e => e.Id == id);
-        }
     }
 }
