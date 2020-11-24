@@ -26,7 +26,7 @@ namespace AppointmentSite.Controllers
         }
 
         // GET: Appointments/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, string eMail)
         {
             if (id == null)
             {
@@ -54,14 +54,18 @@ namespace AppointmentSite.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Notes,Name,Subject,PhoneNumber,EmailAddress,AppointmentDateTime")] Appointments appointments)
+        public async Task<IActionResult> Create(Appointment appointments)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(appointments);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+                if (AppointmentsManager.validAppointment(appointments.StartDateTime, appointments.duration, _context))
+                {
+                    _context.Add(appointments);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction("Details", new { appointments.Id, appointments.EmailAddress }); // Send them to the details page for their appointment
+                }
+                ModelState.AddModelError("StartDateTime", "The appointment entered is not available. Please try again.");
+            }   
             return View(appointments);
         }
 
@@ -86,7 +90,7 @@ namespace AppointmentSite.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Notes,Name,Subject,PhoneNumber,EmailAddress,AppointmentDateTime")] Appointments appointments)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Notes,Name,Subject,PhoneNumber,EmailAddress,AppointmentDateTime")] Appointment appointments)
         {
             if (id != appointments.Id)
             {

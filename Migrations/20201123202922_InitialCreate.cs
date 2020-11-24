@@ -13,12 +13,13 @@ namespace AppointmentSite.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Notes = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: false),
                     Subject = table.Column<string>(nullable: false),
-                    PhoneNumber = table.Column<int>(nullable: false),
-                    EmailAddress = table.Column<string>(nullable: false),
-                    AppointmentDateTime = table.Column<DateTime>(nullable: false)
+                    PhoneNumber = table.Column<string>(maxLength: 20, nullable: false),
+                    EmailAddress = table.Column<string>(maxLength: 300, nullable: false),
+                    StartDateTime = table.Column<DateTime>(nullable: false),
+                    duration = table.Column<int>(nullable: false),
+                    Notes = table.Column<string>(maxLength: 1000, nullable: false)
                 },
                 constraints: table =>
                 {
