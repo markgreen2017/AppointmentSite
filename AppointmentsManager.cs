@@ -41,7 +41,7 @@ namespace AppointmentSite
             return false;
         }
 
-        public void DeleteAppointment(int? id)
+        public void DeleteAppointment(int? id, bool isManager)
         {
             var appointment =  _context.Appointments.Find(id);
             _context.Appointments.Remove(appointment);

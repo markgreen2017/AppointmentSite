@@ -134,10 +134,9 @@ namespace AppointmentSite.Controllers
 
         // POST: Appointments/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id, bool isManager = false)
         {
-            _apptsmanager.DeleteAppointment(id);
+            _apptsmanager.DeleteAppointment(id, isManager);
             return RedirectToAction(nameof(Login));
         }
     }
