@@ -107,7 +107,7 @@ namespace AppointmentSite.Controllers
             {
                 if (_apptsmanager.EditAppointment(appointment))
                 {
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Create));
                 }
                 ModelState.AddModelError("StartDateTime", "The appointment entered is not available. Please try again.");
             }
@@ -136,8 +136,13 @@ namespace AppointmentSite.Controllers
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteConfirmed(int id, bool isManager = false)
         {
-            _apptsmanager.DeleteAppointment(id, isManager);
-            return RedirectToAction(nameof(Login));
+            // Present the user an error message if they cannot delete the given appointment
+            if (!(_apptsmanager.DeleteAppointment(id, isManager)))
+            {
+                TempData["DeletionError"] = "Error: The appointment you are trying to delete is too close to its scheduled time.";
+                return RedirectToAction("Details", new { id = id });
+            }
+            return RedirectToAction(nameof(Create));
         }
     }
 }

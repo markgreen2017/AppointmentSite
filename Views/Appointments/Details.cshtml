@@ -5,7 +5,7 @@
 }
 
 <h1>Details</h1>
-
+<h5 style="color:red">@(TempData["DeletionError"] == null ? "" : TempData["DeletionError"])</h5>
 <div>
     <h4>Appointment</h4>
     <hr />
@@ -49,5 +49,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
 </div>

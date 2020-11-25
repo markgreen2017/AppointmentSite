@@ -41,11 +41,25 @@ namespace AppointmentSite
             return false;
         }
 
-        public void DeleteAppointment(int? id, bool isManager)
+        public bool DeleteAppointment(int? id, bool isManager)
         {
-            var appointment =  _context.Appointments.Find(id);
-            _context.Appointments.Remove(appointment);
-            _context.SaveChanges();
+            var appointment = _context.Appointments.Find(id);
+            if (isManager)
+            {
+                _context.Appointments.Remove(appointment);
+                _context.SaveChanges();
+                return true;
+            }
+            else if(appointment.StartDateTime > DateTime.Now.AddHours(48))
+            { 
+                _context.Appointments.Remove(appointment);
+                _context.SaveChanges();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         // TODO: Redo this via overload to search via appointment Id and last name
