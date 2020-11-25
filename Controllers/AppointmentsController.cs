@@ -19,10 +19,22 @@ namespace AppointmentSite.Controllers
             _apptsmanager = apptsmanager;
         }
 
-        // GET: Appointments
-        public IActionResult Index()
+        public IActionResult Login()
         {
-            return View(_apptsmanager.GetAppointments());
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(string username, string password)
+        {
+            LoginManager login = new LoginManager();
+
+            if (login.ValidateLogin(username, password))
+            {
+                return View("Index", _apptsmanager.GetAppointments());
+            }
+
+            return RedirectToAction(nameof(Login));
         }
 
         // GET: Appointments/Details/5
@@ -95,7 +107,7 @@ namespace AppointmentSite.Controllers
             {
                 if (_apptsmanager.EditAppointment(appointment))
                 {
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Create));
                 }
                 ModelState.AddModelError("StartDateTime", "The appointment entered is not available. Please try again.");
             }
@@ -122,12 +134,15 @@ namespace AppointmentSite.Controllers
 
         // POST: Appointments/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id, bool isManager = false)
         {
-            _apptsmanager.DeleteAppointment(id);
-            return RedirectToAction(nameof(Index));
+            // Present the user an error message if they cannot delete the given appointment
+            if (!(_apptsmanager.DeleteAppointment(id, isManager)))
+            {
+                TempData["DeletionError"] = "Error: The appointment you are trying to delete is too close to its scheduled time.";
+                return RedirectToAction("Details", new { id = id });
+            }
+            return RedirectToAction(nameof(Create));
         }
-
     }
 }
