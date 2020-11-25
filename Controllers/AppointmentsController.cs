@@ -19,10 +19,22 @@ namespace AppointmentSite.Controllers
             _apptsmanager = apptsmanager;
         }
 
-        // GET: Appointments
-        public IActionResult Index()
+        public IActionResult Login()
         {
-            return View(_apptsmanager.GetAppointments());
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Login(string username, string password)
+        {
+            LoginManager login = new LoginManager();
+
+            if (login.ValidateLogin(username, password))
+            {
+                return View("Index", _apptsmanager.GetAppointments());
+            }
+
+            return RedirectToAction(nameof(Login));
         }
 
         // GET: Appointments/Details/5
@@ -126,8 +138,7 @@ namespace AppointmentSite.Controllers
         public IActionResult DeleteConfirmed(int id)
         {
             _apptsmanager.DeleteAppointment(id);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Login));
         }
-
     }
 }
