@@ -110,10 +110,10 @@
 
         if (!(filterTime == null)) {
 
-            //for (var i = 1, row; row = table.rows[i]; i++) {
-            //    ShowRow(row.cells[0].innerText);
-            //    console.log(row.cells[0].innerText);
-            //}
+            for (var i = 1, row; row = table.rows[i]; i++) {
+                ShowRow(row);
+                console.log(row.cells[0].innerText);
+            }
 
             if (filterType == "weekly") {
                 date.setDate(date.getDate() - 3);
@@ -122,14 +122,8 @@
                 var endDate = new Date(date);
                 var checkDate;
 
-                console.log(startDate);
-                console.log(endDate);
-
                 for (var j = 1, row; row = table.rows[j]; j++) {
                     checkDate = new Date(Date.parse(row.cells[6].innerText));
-
-                    console.log(row.cells[6].innerText);
-                    console.log(checkDate);
 
                     if (checkDate < startDate || checkDate > endDate) {
                         HideRow(row.cells[0].innerText);
@@ -141,9 +135,6 @@
                 for (var j = 1, row; row = table.rows[j]; j++) {
                     checkDate = new Date(Date.parse(row.cells[6].innerText));
 
-                    console.log(row.cells[6].innerText);
-                    console.log(checkDate);
-
                     if (!(date.getFullYear() === checkDate.getFullYear() && date.getMonth() === checkDate.getMonth() && date.getDate() == checkDate.getDate())) {
                         HideRow(row.cells[0].innerText);
                     }
@@ -153,9 +144,6 @@
 
                 for (var j = 1, row; row = table.rows[j]; j++) {
                     checkDate = new Date(Date.parse(row.cells[6].innerText));
-
-                    console.log(row.cells[6].innerText);
-                    console.log(checkDate);
 
                     if (!(date.getFullYear() === checkDate.getFullYear() && date.getMonth() === checkDate.getMonth() && date.getDate() == checkDate.getDate() && date.getHours() === checkDate.getHours())) {
                         HideRow(row.cells[0].innerText);
@@ -169,8 +157,8 @@
         $("#ROW_" + id).hide();
     }
 
-    function ShowRow(id) {
-        $("#ROW_" + id).show();
+    function ShowRow(row) {
+        $(row).show();
     }
 </script>
 <script>
