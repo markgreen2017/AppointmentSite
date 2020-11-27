@@ -11,10 +11,12 @@ namespace AppointmentSite.Models
     {
         public int Id { get; set; }
 
+        [Display(Name = "First Name")]
         [Required(ErrorMessage = "Please enter your first name.")]
         [StringLength(100, ErrorMessage = "The first name entered is too long. Please try again.")]
         public string FirstName { get; set; }
 
+        [Display(Name = "Last Name")]
         [Required(ErrorMessage = "Please enter your first name.")]
         [StringLength(100, ErrorMessage = "The first name entered is too long. Please try again.")]
         public string LastName { get; set; }

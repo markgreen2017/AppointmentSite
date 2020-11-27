@@ -138,5 +138,21 @@ namespace AppointmentSite.Controllers
             }
             return RedirectToAction(nameof(Create));
         }
+
+        public IActionResult Search()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Search(int? id, string lastName)
+        {
+            if (_apptsmanager.GetAppointment(id, lastName) == null)
+            {
+                return View();
+            }
+
+            return RedirectToAction("Details", new { id = id, lastName = lastName });
+        }
     }
 }
