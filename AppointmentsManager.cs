@@ -62,12 +62,11 @@ namespace AppointmentSite
             }
         }
 
-        // TODO: Redo this via overload to search via appointment Id and last name
-        public Appointment GetAppointment(int? id)
+        public Appointment GetAppointment(int? id, string lastName)
         {
-            
-            var appointment = _context.Appointments.FirstOrDefault(m => m.Id == id);
-            return appointment;
+
+            var selectedAppointment = _context.Appointments.FirstOrDefault(m => m.Id == id && m.LastName == lastName);
+            return selectedAppointment;
         }
 
         public List<Appointment> GetAppointments()
