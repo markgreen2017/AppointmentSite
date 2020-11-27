@@ -11,9 +11,15 @@ namespace AppointmentSite.Models
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Please enter your name.")]
-        [StringLength(100, ErrorMessage = "The name entered is too long. Please try again.")]
-        public string Name { get; set; }
+        [Display(Name = "First Name")]
+        [Required(ErrorMessage = "Please enter your first name.")]
+        [StringLength(100, ErrorMessage = "The first name entered is too long. Please try again.")]
+        public string FirstName { get; set; }
+
+        [Display(Name = "Last Name")]
+        [Required(ErrorMessage = "Please enter your first name.")]
+        [StringLength(100, ErrorMessage = "The first name entered is too long. Please try again.")]
+        public string LastName { get; set; }
 
         [Required(ErrorMessage = "Please enter the subject of your appointment.")]
         [StringLength(100, ErrorMessage = "The subject entered is too long. Please try again.")]

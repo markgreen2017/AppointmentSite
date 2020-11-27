@@ -37,16 +37,14 @@ namespace AppointmentSite.Controllers
             return RedirectToAction(nameof(Login));
         }
 
-        // GET: Appointments/Details/5
-        // TODO: Fix this to only give details via id and last name
-        public IActionResult Details(int? id, string eMail)
+        public IActionResult Details(int? id, string lastName)
         {
-            if (id == null)
+            if (id == null || lastName == null)
             {
                 return NotFound();
             }
 
-            var appointment = _apptsmanager.GetAppointment(id);
+            var appointment = _apptsmanager.GetAppointment(id, lastName);
             
             if (appointment == null)
             {
@@ -56,7 +54,6 @@ namespace AppointmentSite.Controllers
             return View(appointment);
         }
 
-        // GET: Appointments/Create
         public IActionResult Create()
         {
             return View();
@@ -66,26 +63,25 @@ namespace AppointmentSite.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Appointment appointment)
         {
-            if (ModelState.IsValid)
+            if (ModelState.IsValid) // Ensure that the appointment information entered is valid
             {
-                if (_apptsmanager.CreateAppointment(appointment))
+                if (_apptsmanager.CreateAppointment(appointment)) // Check if the appointment was successfully created
                 {
-                    return RedirectToAction("Details", new { appointment.Id, appointment.EmailAddress }); // Send them to the details page for their appointment
+                    return RedirectToAction("Details", new { appointment.Id, appointment.LastName }); // Send them to the details page for their appointment
                 }
                 ModelState.AddModelError("StartDateTime", "The appointment entered is not available. Please try again.");
             }   
-            return View(appointment);
+            return View(appointment); // Refresh the page with model error indicating appointment was not created correctly
         }
 
-        // GET: Appointments/Edit/5
-        public IActionResult Edit(int? id)
+        public IActionResult Edit(int? id, string lastName)
         {
-            if (id == null)
+            if (id == null || lastName == null)
             {
                 return NotFound();
             }
 
-            var appointment = _apptsmanager.GetAppointment(id);
+            var appointment = _apptsmanager.GetAppointment(id, lastName);
 
             if (appointment == null)
             {
@@ -107,22 +103,21 @@ namespace AppointmentSite.Controllers
             {
                 if (_apptsmanager.EditAppointment(appointment))
                 {
-                    return RedirectToAction(nameof(Create));
+                    return RedirectToAction("Details", new { id, appointment.LastName });
                 }
                 ModelState.AddModelError("StartDateTime", "The appointment entered is not available. Please try again.");
             }
             return View(appointment);
         }
 
-        // GET: Appointments/Delete/5
-        public IActionResult Delete(int? id)
+        public IActionResult Delete(int? id, string lastName)
         {
-            if (id == null)
+            if (id == null || lastName == null)
             {
                 return NotFound();
             }
 
-            var appointment = _apptsmanager.GetAppointment(id);
+            var appointment = _apptsmanager.GetAppointment(id, lastName);
 
             if (appointment == null)
             {
@@ -132,7 +127,6 @@ namespace AppointmentSite.Controllers
             return View(appointment);
         }
 
-        // POST: Appointments/Delete/5
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteConfirmed(int id, bool isManager = false)
         {
@@ -143,6 +137,23 @@ namespace AppointmentSite.Controllers
                 return RedirectToAction("Details", new { id = id });
             }
             return RedirectToAction(nameof(Create));
+        }
+
+        public IActionResult Search()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Search(int? id, string lastName)
+        {
+            if (_apptsmanager.GetAppointment(id, lastName) == null)
+            {
+                TempData["AppointmentNotFound"] = "Error: No appointment found with the given ID and last name. Please try again.";
+                return View();
+            }
+
+            return RedirectToAction("Details", new { id = id, lastName = lastName });
         }
     }
 }

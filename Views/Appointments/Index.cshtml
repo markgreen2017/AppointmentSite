@@ -13,7 +13,13 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Subject)
@@ -27,6 +33,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.StartDateTime)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.duration)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -34,7 +43,13 @@
 @foreach (var item in Model) {
         <tr id="ROW_@item.Id">
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Subject)
@@ -49,8 +64,10 @@
                 @Html.DisplayFor(modelItem => item.StartDateTime)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                @Html.DisplayFor(modelItem => item.duration)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id" asp-route-lastName="@item.LastName">Edit</a> |
                 <a href="#" onclick="DeleteAppointment(@item.Id)">Delete</a>
             </td>
         </tr>
