@@ -149,6 +149,7 @@ namespace AppointmentSite.Controllers
         {
             if (_apptsmanager.GetAppointment(id, lastName) == null)
             {
+                TempData["AppointmentNotFound"] = "Error: No appointment found with the given ID and last name. Please try again.";
                 return View();
             }
 
