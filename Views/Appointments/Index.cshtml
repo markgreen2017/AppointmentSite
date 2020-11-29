@@ -9,6 +9,24 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<form>
+    <div class="form-group">
+        <label class="control-label">Filter Appointments</label>
+        <select class="form-control" name="FilterType">
+            <option value="weekly">Weekly</option>
+            <option value="daily">Daily</option>
+            <option value="hourly">Hourly</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <input type="datetime-local" class="form-control" name="FilterTime" />
+    </div>
+    <div class="form-group">
+        <a href="#" id="filterbutton">Apply Filter</a>
+        <label> - </label>
+        <a href="#" id="unfilterbutton" onclick="ShowAllRows()">Show All</a>
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>
@@ -80,4 +98,73 @@
         if (deleteConfirmed)
             $.post('@Url.Action("Delete", "Appointments")', { id: id, isManager: true }, function () { $("#ROW_" + id).css("display", "none"); });
     }
+
+    function FilterAppointments() {
+        var filterType = document.getElementsByName("FilterType")[0].value;
+        var filterTime = document.getElementsByName("FilterTime")[0].value;
+        var date = new Date(Date.parse(filterTime));
+
+        var table = document.getElementsByTagName('table')[0];
+
+        if (!(filterTime == null)) {
+
+            ShowAllRows();
+
+            if (filterType == "weekly") {
+                var dayOfWeek = date.getDay();
+                date.setDate(date.getDate() - dayOfWeek);
+                var startDate = new Date(date);
+                date.setDate(date.getDate() + (7 - dayOfWeek + 1));
+                var endDate = new Date(date);
+                var checkDate;
+
+                for (var j = 1, row; row = table.rows[j]; j++) {
+                    checkDate = new Date(Date.parse(row.cells[6].innerText));
+
+                    if (checkDate < startDate || checkDate > endDate) {
+                        HideRow(row.cells[0].innerText);
+                    }
+                }
+            } else if (filterType == "daily") {
+                var checkDate;
+
+                for (var j = 1, row; row = table.rows[j]; j++) {
+                    checkDate = new Date(Date.parse(row.cells[6].innerText));
+
+                    if (!(date.getFullYear() === checkDate.getFullYear() && date.getMonth() === checkDate.getMonth() && date.getDate() == checkDate.getDate())) {
+                        HideRow(row.cells[0].innerText);
+                    }
+                }
+            } else {
+                var checkDate;
+
+                for (var j = 1, row; row = table.rows[j]; j++) {
+                    checkDate = new Date(Date.parse(row.cells[6].innerText));
+
+                    if (!(date.getFullYear() === checkDate.getFullYear() && date.getMonth() === checkDate.getMonth() && date.getDate() == checkDate.getDate() && date.getHours() === checkDate.getHours())) {
+                        HideRow(row.cells[0].innerText);
+                    }
+                }
+            }
+        }
+    }
+
+    function ShowAllRows() {
+        var table = document.getElementsByTagName('table')[0];
+
+        for (var i = 1, row; row = table.rows[i]; i++) {
+            ShowRow(row);
+        }
+    }
+
+    function HideRow(id) {
+        $("#ROW_" + id).css("display", "none");
+    }
+
+    function ShowRow(row) {
+        $(row).css("display", "table-row");
+    }
+</script>
+<script>
+    document.getElementById("filterbutton").addEventListener("click", FilterAppointments, false);
 </script>

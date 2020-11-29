@@ -33,7 +33,7 @@ namespace AppointmentSite.Controllers
             {
                 return View("Index", _apptsmanager.GetAppointments());
             }
-
+            TempData["LoginError"] = "Error: Invalid login credentials. Please try again.";
             return RedirectToAction(nameof(Login));
         }
 
