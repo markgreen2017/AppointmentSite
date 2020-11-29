@@ -102,23 +102,19 @@
         var filterTime = document.getElementsByName("FilterTime")[0].value;
         var date = new Date(Date.parse(filterTime));
 
-        console.log(filterType);
-        console.log(filterTime);
-        console.log(date);
-
         var table = document.getElementsByTagName('table')[0];
 
         if (!(filterTime == null)) {
 
             for (var i = 1, row; row = table.rows[i]; i++) {
                 ShowRow(row);
-                console.log(row.cells[0].innerText);
             }
 
             if (filterType == "weekly") {
-                date.setDate(date.getDate() - 3);
+                var dayOfWeek = date.getDay();
+                date.setDate(date.getDate() - dayOfWeek);
                 var startDate = new Date(date);
-                date.setDate(date.getDate() + 7);
+                date.setDate(date.getDate() + (7 - dayOfWeek + 1));
                 var endDate = new Date(date);
                 var checkDate;
 
@@ -154,11 +150,11 @@
     }
 
     function HideRow(id) {
-        $("#ROW_" + id).hide();
+        $("#ROW_" + id).css("display", "none");
     }
 
     function ShowRow(row) {
-        $(row).show();
+        $(row).css("display", "table-row");
     }
 </script>
 <script>
