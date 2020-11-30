@@ -17,8 +17,8 @@ namespace AppointmentSite.Models
         public string FirstName { get; set; }
 
         [Display(Name = "Last Name")]
-        [Required(ErrorMessage = "Please enter your first name.")]
-        [StringLength(100, ErrorMessage = "The first name entered is too long. Please try again.")]
+        [Required(ErrorMessage = "Please enter your last name.")]
+        [StringLength(100, ErrorMessage = "The last name entered is too long. Please try again.")]
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "Please enter the subject of your appointment.")]
@@ -48,7 +48,7 @@ namespace AppointmentSite.Models
         [Required(ErrorMessage = "Please enter a duration.")]
         public int duration { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Please enter notes about your appointment.")]
         [StringLength(1000, ErrorMessage = "The notes entered are too long. Please try again.")]
         public string Notes { get; set; }
     }
