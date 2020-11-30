@@ -128,13 +128,13 @@ namespace AppointmentSite.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirmed(int id, bool isManager = false)
+        public IActionResult DeleteConfirmed(int id, string lastName = "", bool isManager = false)
         {
             // Present the user an error message if they cannot delete the given appointment
             if (!(_apptsmanager.DeleteAppointment(id, isManager)))
             {
                 TempData["DeletionError"] = "Error: The appointment you are trying to delete is too close to its scheduled time.";
-                return RedirectToAction("Details", new { id = id });
+                return RedirectToAction("Details", new { id = id , lastName = lastName});
             }
             return RedirectToAction(nameof(Create));
         }
