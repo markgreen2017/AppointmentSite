@@ -32,13 +32,17 @@ namespace AppointmentSite
 
         public bool EditAppointment(Appointment appointment)
         {
-            if (ValidAppointment(appointment.StartDateTime, appointment.duration, appointment.Id))
+            if (WithinEditWindow(appointment))
             {
-                _context.Update(appointment);
-                _context.SaveChanges();
-                return true;
+                if (ValidAppointment(appointment.StartDateTime, appointment.duration, appointment.Id))
+                {
+                    _context.Update(appointment);
+                    _context.SaveChanges();
+                    return true;
+                }
+                return false;
             }
-            return false;
+            return true;
         }
 
         public bool DeleteAppointment(int? id, bool isManager)
@@ -50,7 +54,7 @@ namespace AppointmentSite
                 _context.SaveChanges();
                 return true;
             }
-            else if(appointment.StartDateTime > DateTime.Now.AddHours(48))
+            else if(WithinEditWindow(appointment))
             { 
                 _context.Appointments.Remove(appointment);
                 _context.SaveChanges();
@@ -105,6 +109,11 @@ namespace AppointmentSite
         private bool AppointmentExists(int id)
         {
             return _context.Appointments.Any(m => m.Id == id);
+        }
+
+        public bool WithinEditWindow(Appointment appointment)
+        {
+            return (appointment.StartDateTime > DateTime.Now.AddHours(48));
         }
     }
 }

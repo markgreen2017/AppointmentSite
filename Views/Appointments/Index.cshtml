@@ -85,7 +85,7 @@
                 @Html.DisplayFor(modelItem => item.duration)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id" asp-route-lastName="@item.LastName">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id" asp-route-lastName="@item.LastName">Details</a> |
                 <a href="#" onclick="DeleteAppointment(@item.Id)">Delete</a>
             </td>
         </tr>

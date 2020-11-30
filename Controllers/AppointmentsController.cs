@@ -87,6 +87,12 @@ namespace AppointmentSite.Controllers
             {
                 return NotFound();
             }
+
+            if (!_apptsmanager.WithinEditWindow(appointment))
+            {
+                TempData["TooCloseToEditError"] = "Error: Appointment is scheduled within 48 hours of now and cannot be edited.";
+                return RedirectToAction("Details", new { id, appointment.LastName });
+            }
             return View(appointment);
         }
 
@@ -101,11 +107,22 @@ namespace AppointmentSite.Controllers
 
             if (ModelState.IsValid)
             {
-                if (_apptsmanager.EditAppointment(appointment))
+                bool apptedit = _apptsmanager.EditAppointment(appointment);
+                bool withineditwindow = _apptsmanager.WithinEditWindow(appointment);
+
+                if (apptedit && withineditwindow)
                 {
                     return RedirectToAction("Details", new { id, appointment.LastName });
                 }
-                ModelState.AddModelError("StartDateTime", "The appointment entered is not available. Please try again.");
+                else if (!apptedit)
+                {
+                    ModelState.AddModelError("StartDateTime", "The appointment entered is not available. Please try again.");
+                }
+                else if (!withineditwindow)
+                {
+                    TempData["TooCloseToEditError"] = "Error: Appointment is scheduled within 48 hours of now and cannot be edited.";
+                    return RedirectToAction("Details", new { id, appointment.LastName });
+                }
             }
             return View(appointment);
         }
@@ -128,7 +145,7 @@ namespace AppointmentSite.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirmed(int id, string lastName = "", bool isManager = false)
+        public IActionResult DeleteConfirmed(int id, string lastName ="", bool isManager = false)
         {
             // Present the user an error message if they cannot delete the given appointment
             if (!(_apptsmanager.DeleteAppointment(id, isManager)))
